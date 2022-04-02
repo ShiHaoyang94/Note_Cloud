@@ -1,0 +1,85 @@
+<!--
+Author: W3layouts
+Author URL: http://w3layouts.com
+-->
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+    <title>Service Register</title>
+
+    <!-- Meta tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+
+
+    <!-- CSS Stylesheet -->
+    <link rel="stylesheet" href="{% static 'css/style.css'%}" type="text/css" media="all" />
+    <link rel="stylesheet" href="{% static 'css/font-awesome.css'%}" type="text/css" media="all" />
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css'%}" type="text/css" media="all" />
+
+</head>
+
+<body>
+    <div class="signinform">
+        <h1>Service Register Form</h1>
+        <!-- container -->
+        <div class="container">
+            <!-- main content -->
+            <div class="w3l-form-info">
+                <div class="w3_info">
+                    <h2>Login</h2>
+                    <form method="post">
+                        <div class="input-group">
+                            <span><i class="fas fa-user" aria-hidden="true"></i></span>
+                            <input type="text" placeholder="Username" required="required" name="username">
+                        </div>
+                        <div class="input-group">
+                            <div class="input-group">
+                            <span><i class="fa fa-envelope-open" aria-hidden="true"></i></span>
+                            <input type="email" placeholder="email" required="required" name="email" >
+                        </div>
+                            <div class="input-group">
+                            <span><i class="fas fa-key" aria-hidden="true"></i></span>
+                            <input type="Password" placeholder="Password" required="required" name="password">
+                            </div>
+
+                            <span><i class="fas fa-key" aria-hidden="true"></i></span>
+                            <input type="Password" placeholder="Password agin" required="required" name="password2">
+
+                        </div>
+
+                        <button class="btn btn-primary btn-block" type="submit">注册</button>
+                    </form>
+                             		 {% if messages %}
+        <script>
+            {% for msg in messages %}
+                alert('{{ msg.message }}');
+            {% endfor %}
+        </script>
+    {% endif %}
+                </div>
+                 </div>
+             </div>
+         </div>
+     </div>
+
+        <!-- //container -->
+        <!-- footer -->
+        <div class="footer">
+            <p>&copy; 2022 Service register form. All Rights Reserved | Design by <a href=""
+                    target="blank">ShiHaoyang</a></p>
+        </div>
+        <!-- footer -->
+    </div>
+
+    <!-- fontawesome v5-->
+    <script src="{% static 'js/fontawesome.js '%}"></script>
+
+</body>
+
+</html>

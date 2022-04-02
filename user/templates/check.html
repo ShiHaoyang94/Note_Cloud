@@ -1,0 +1,72 @@
+<!--
+Author: W3layouts
+Author URL: http://w3layouts.com
+-->
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+    <title>Service Check </title>
+
+    <!-- Meta tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+
+
+    <!-- CSS Stylesheet -->
+    <link rel="stylesheet" href="{% static 'css/style.css'%}" type="text/css" media="all" />
+    <link rel="stylesheet" href="{% static 'css/font-awesome.css'%}" type="text/css" media="all" />
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css'%}" type="text/css" media="all" />
+
+</head>
+
+<body>
+    <div class="signinform">
+        <h1>我们已为您的邮箱发送了验证码请验证</h1>
+        <!-- container -->
+        <div class="container">
+            <!-- main content -->
+            <div class="w3l-form-info">
+                <div class="w3_info">
+                    <h2>请输入您的验证码</h2>
+                    <form method="post">
+                        <div class="input-group">
+                            <span><i class="fa fa-asterisk" aria-hidden="true"></i></span>
+                            <input type="text" placeholder="请输入验证码" required="required" name="code">
+                        </div>
+                            <button class="btn btn-primary btn-block" type="submit">验证</button>
+
+                    </form>
+                    <button class="btn btn-primary btn-block" onclick="location.href='/user/register'">重新发送</button>
+                             		 {% if messages %}
+        <script>
+            {% for msg in messages %}
+                alert('{{ msg.message }}');
+            {% endfor %}
+        </script>
+    {% endif %}
+                </div>
+                 </div>
+             </div>
+         </div>
+     </div>
+
+        <!-- //container -->
+        <!-- footer -->
+        <div class="footer">
+            <p>&copy; 2022 Service check form. All Rights Reserved | Design by <a href=""
+                    target="blank">ShiHaoyang</a></p>
+        </div>
+        <!-- footer -->
+    </div>
+
+    <!-- fontawesome v5-->
+    <script src="{% static 'js/fontawesome.js '%}"></script>
+
+</body>
+
+</html>

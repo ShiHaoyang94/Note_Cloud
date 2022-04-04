@@ -10,9 +10,18 @@ import time
 from .models import User
 # Create your views here.
 def login(request):
-
     if request.method == 'GET':
+        if request.session.get('username'):
+            messages.success(request, "已登录")
 
+            return HttpResponseRedirect('/index')
+        cookie_user = request.COOKIES.get('username')
+
+        if cookie_user:
+            request.session['username'] = cookie_user
+            messages.success(request, "已登录")
+
+            return HttpResponseRedirect('/index')
         return render(request, 'login.html')
 
     elif request.method == 'POST':
@@ -43,12 +52,27 @@ def login(request):
             if login_password_m == user.password:
 
 
-                messages.success(request, "登录成功")
+                #存cookies
+                if 'remenber'in request.POST:
+                    # 记录会话状态
+                    request.session['username'] = login_username
+                    # request.session['uid']=User.id
 
+                    resq = HttpResponseRedirect('/index')
+                    resq.set_cookie('username',login_username,60*60*24*3)
+                    # resq.set_cookie('uid',User.id)
+                    messages.success(request, "登录成功")
 
-                return HttpResponseRedirect('/index')
+                    return resq
+
+                else:
+
+                    messages.success(request, "登录成功")
+
+                    return HttpResponseRedirect('/index')
 
             else:
+
                 messages.success(request, "用户名或密码错误，登录失败")
 
                 return HttpResponseRedirect('/user/login')

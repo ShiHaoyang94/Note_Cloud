@@ -1,7 +1,7 @@
 import smtplib
 from email.mime.text import MIMEText
 from email.utils import formataddr
-
+import hashlib
 from django.contrib import messages
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
@@ -20,6 +20,12 @@ def login(request):
         login_username = request.POST['username']
         login_password = request.POST['password']
 
+        m = hashlib.md5()
+
+        m.update(login_password.encode())
+
+        login_password_m = m.hexdigest()
+
         if login_password.isspace() or login_username.isspace() or login_password==''or login_username=='':
             messages.error(request, "用户名和密码不能为空")
             return HttpResponseRedirect('/user/login')
@@ -34,7 +40,7 @@ def login(request):
                 return HttpResponseRedirect('/user/login')
 
 
-            if login_password == user.password:
+            if login_password_m == user.password:
 
 
                 messages.success(request, "登录成功")
@@ -71,7 +77,7 @@ def register(request):
         except Exception as e:
 
             try:
-                res = User.objects.get(email=register_email, is_active=True)
+                User.objects.get(email=register_email, is_active=True)
 
                 messages.error(request, "邮箱已注册，请重新注册")
 
@@ -80,6 +86,13 @@ def register(request):
             except Exception as e:
 
                 if register_password==register_password2:
+
+                    m = hashlib.md5()
+
+                    m.update(register_password.encode())
+
+                    register_password_m = m.hexdigest()
+
                     my_sender = '352446506@qq.com'
                     my_pass = 'auoxbalkhtkebggh'
                     my_user = register_email
@@ -101,7 +114,7 @@ def register(request):
                     resq = HttpResponseRedirect('/user/check')
                     resq.set_cookie(key='username', value=register_username,max_age=None,expires=None)
                     resq.set_cookie(key='email', value=register_email,max_age=None,expires=None)
-                    resq.set_cookie(key='password', value=register_password,max_age=None,expires=None)
+                    resq.set_cookie(key='password', value=register_password_m,max_age=None,expires=None)
                     resq.set_cookie(key='code', value=code,max_age=None,expires=None)
 
                     return resq
@@ -127,7 +140,7 @@ def check(request):
             User.objects.create(username=request.COOKIES.get('username'),email=request.COOKIES.get('email'),password=request.COOKIES.get('password'))
             messages.error(request, "注册成功")
 
-            return HttpResponseRedirect('/index')
+            return HttpResponseRedirect('/user/login')
         else:
             messages.error(request, "验证码输入失败")
             return HttpResponseRedirect('/check')

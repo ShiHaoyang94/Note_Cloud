@@ -3,6 +3,7 @@ from email.mime.text import MIMEText
 from email.utils import formataddr
 import hashlib
 from django.contrib import messages
+from django.contrib.messages import get_messages, add_message
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 import time
@@ -10,19 +11,20 @@ import time
 from .models import User
 # Create your views here.
 def login(request):
+
     if request.method == 'GET':
-        if request.session.get('username'):
-            messages.success(request, "已登录")
+        if request.session.get('username') :
 
             return HttpResponseRedirect('/index')
-        cookie_user = request.COOKIES.get('username')
 
-        if cookie_user:
-            request.session['username'] = cookie_user
-            messages.success(request, "已登录")
+
+        elif request.COOKIES.get('username'):
+
+            request.session['username'] = request.COOKIES.get('username')
 
             return HttpResponseRedirect('/index')
-        return render(request, 'login.html')
+        else:
+            return render(request, 'login.html')
 
     elif request.method == 'POST':
 
@@ -50,24 +52,23 @@ def login(request):
 
 
             if login_password_m == user.password:
-
+                # 记录会话状态
+                request.session['username'] = login_username
+                # request.session['uid']=User.id
 
                 #存cookies
                 if 'remenber'in request.POST:
-                    # 记录会话状态
-                    request.session['username'] = login_username
-                    # request.session['uid']=User.id
+
 
                     resq = HttpResponseRedirect('/index')
                     resq.set_cookie('username',login_username,60*60*24*3)
                     # resq.set_cookie('uid',User.id)
-                    messages.success(request, "登录成功")
+
+
 
                     return resq
 
                 else:
-
-                    messages.success(request, "登录成功")
 
                     return HttpResponseRedirect('/index')
 
@@ -90,6 +91,10 @@ def register(request):
         register_email = request.POST['email']
         register_password = request.POST['password']
         register_password2 = request.POST['password2']
+        if register_email.find("@") == -1 or not register_email.endswith('.com'):
+            messages.error(request, "邮箱格式错误，请重新注册")
+
+            return HttpResponseRedirect('/user/register')
 
         try:
             re = User.objects.get(username=register_username, is_active=True)
@@ -136,10 +141,10 @@ def register(request):
                     server.quit()
 
                     resq = HttpResponseRedirect('/user/check')
-                    resq.set_cookie(key='username', value=register_username,max_age=None,expires=None)
-                    resq.set_cookie(key='email', value=register_email,max_age=None,expires=None)
-                    resq.set_cookie(key='password', value=register_password_m,max_age=None,expires=None)
-                    resq.set_cookie(key='code', value=code,max_age=None,expires=None)
+                    resq.set_cookie(key='res_username', value=register_username,max_age=None,expires=None)
+                    resq.set_cookie(key='res_email', value=register_email,max_age=None,expires=None)
+                    resq.set_cookie(key='res_password', value=register_password_m,max_age=None,expires=None)
+                    resq.set_cookie(key='res_code', value=code,max_age=None,expires=None)
 
                     return resq
 
@@ -158,13 +163,21 @@ def check(request):
 
     elif request.method == 'POST':
         codes=request.POST['code']
-        code=request.COOKIES.get('code')
+        code=request.COOKIES.get('res_code')
         if code==codes:
 
-            User.objects.create(username=request.COOKIES.get('username'),email=request.COOKIES.get('email'),password=request.COOKIES.get('password'))
-            messages.error(request, "注册成功")
+            User.objects.create(username=request.COOKIES.get('res_username'),email=request.COOKIES.get('res_email'),password=request.COOKIES.get('res_password'))
+
 
             return HttpResponseRedirect('/user/login')
         else:
-            messages.error(request, "验证码输入失败")
+            messages.error(request, "验证码输入错误")
             return HttpResponseRedirect('/check')
+
+def exit(request):
+    resq = HttpResponseRedirect('/user/login')
+    if request.COOKIES.get('username'):
+        resq.delete_cookie('username')
+    if request.session['username']:
+        del request.session['username']
+    return resq

@@ -17,11 +17,13 @@ from django.contrib import admin
 from django.urls import path
 from django.urls import path, include
 
+import index.views
+from index import views as index_views
 from Note_Cloud import view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('user/',include('user.urls')),
-    path('index/',view.index),
+    path('index/',index_views.index),
     path('',view.login)
 ]

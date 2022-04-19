@@ -28,3 +28,8 @@ class SimpleMiddleware(MiddlewareMixin):
                         return HttpResponseRedirect('/index')
                 else:
                     return HttpResponseRedirect('/user/login/')
+
+# class IpMiddleware(MiddlewareMixin):
+#     def process_request(self, request):
+#         ip_address=request.META['REMOTE_ADDR']
+#         print('我的地址'+ip_address)

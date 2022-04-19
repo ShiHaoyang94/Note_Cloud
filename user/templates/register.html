@@ -34,6 +34,7 @@ Author URL: http://w3layouts.com
                 <div class="w3_info">
                     <h2>Login</h2>
                     <form method="post">
+                        {% csrf_token %}
                         <div class="input-group">
                             <span><i class="fas fa-user" aria-hidden="true"></i></span>
                             <input type="text" placeholder="Username" required="required" name="username">

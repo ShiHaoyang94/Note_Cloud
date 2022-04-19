@@ -1,5 +1,5 @@
 from django.shortcuts import render,HttpResponse,redirect,HttpResponseRedirect
-
+import re
 
 
 try:
@@ -10,7 +10,10 @@ except ImportError:
 
 class SimpleMiddleware(MiddlewareMixin):
     def process_request(self, request):
-        if request.COOKIES.get('res_code'):
+        if re.match("^/admin/", request.path):
+
+            return None
+        elif request.COOKIES.get('res_code'):
             if request.path != '/user/login/' and request.path != '/user/register/' and request.path != '/user/check/' :
 
                 if  request.session.get('username') or request.COOKIES.get('username') :
@@ -20,6 +23,7 @@ class SimpleMiddleware(MiddlewareMixin):
                 else:
                     return HttpResponseRedirect('/user/login/')
         else:
+
             if request.path != '/user/login/' and request.path != '/user/register/' :
 
                 if  request.session.get('username') or request.COOKIES.get('username') :
@@ -28,3 +32,8 @@ class SimpleMiddleware(MiddlewareMixin):
                         return HttpResponseRedirect('/index')
                 else:
                     return HttpResponseRedirect('/user/login/')
+
+# class IpMiddleware(MiddlewareMixin):
+#     def process_request(self, request):
+#         ip_address=request.META['REMOTE_ADDR']
+#         print('我的地址'+ip_address)

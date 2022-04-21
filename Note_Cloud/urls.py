@@ -20,10 +20,11 @@ from django.urls import path, include
 import index.views
 from index import views as index_views
 from Note_Cloud import view
-
+from user import views as user_views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('user/',include('user.urls')),
     path('index/',index_views.index),
-    path('',view.login)
+    path('',view.login),
+    path('busy/',user_views.busy)
 ]

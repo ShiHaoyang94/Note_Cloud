@@ -51,6 +51,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'middleware.middleware.SimpleMiddleware',
     # 'middleware.middleware.IpMiddleware'
+    'middleware.middleware.ExceptionMW'
 
 ]
 
@@ -132,3 +133,15 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = ( os.path.join('static'), )
 
 STATIC_ROOT = ''
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# smtp 服务的邮箱服务器
+EMAIL_HOST = 'smtp.qq.com'
+# smtp服务固定的端口是25
+EMAL_POST = 25
+# 发送邮件的邮箱
+EMAIL_HOST_USER = '352446506@qq.com'
+# 在邮箱中设置的客户端授权密码
+EMAIL_HOST_PASSWORD = 'dtfvraluuolybigj'
+# 收件人看到的发件人<此处要和发送邮件的邮箱相同>
+EX_EMAIL = ['352446506@qq.com']

@@ -1,6 +1,10 @@
+import traceback
+
 from django.shortcuts import render,HttpResponse,redirect,HttpResponseRedirect
 import re
+from django.core import mail
 
+from Note_Cloud import settings
 
 try:
 
@@ -11,7 +15,8 @@ except ImportError:
 class SimpleMiddleware(MiddlewareMixin):
     def process_request(self, request):
         if re.match("^/admin/", request.path):
-
+            return None
+        elif request.path == '/busy/':
 
             return None
         elif request.COOKIES.get('res_code'):
@@ -38,3 +43,9 @@ class SimpleMiddleware(MiddlewareMixin):
 #     def process_request(self, request):
 #         ip_address=request.META['REMOTE_ADDR']
 #         print('我的地址'+ip_address)
+
+class ExceptionMW(MiddlewareMixin):
+    def process_exception(self,request,exception):
+
+        mail.send_mail(subject='Note_Cloud报错啦~',message=traceback.format_exc(),from_email='352446506@qq.com',recipient_list=settings.EX_EMAIL)
+        return HttpResponseRedirect('/busy')

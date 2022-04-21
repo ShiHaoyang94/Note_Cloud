@@ -5,3 +5,5 @@ from django.shortcuts import render
 
 def login(request):
     return HttpResponseRedirect('/user/login')
+
+

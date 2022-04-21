@@ -11,7 +11,6 @@ import time
 from .models import User
 # Create your views here.
 def login(request):
-
     if request.method == 'GET':
         if request.session.get('username') :
 
@@ -123,7 +122,7 @@ def register(request):
                     register_password_m = m.hexdigest()
 
                     my_sender = '352446506@qq.com'
-                    my_pass = 'auoxbalkhtkebggh'
+                    my_pass = 'dtfvraluuolybigj'
                     my_user = register_email
                     import random
                     code = random.randint(1000, 9999)
@@ -181,3 +180,6 @@ def exit(request):
     if request.session['username']:
         del request.session['username']
     return resq
+
+def busy(request):
+    return render(request, 'busy.html')

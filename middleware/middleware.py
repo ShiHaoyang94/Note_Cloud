@@ -12,6 +12,7 @@ class SimpleMiddleware(MiddlewareMixin):
     def process_request(self, request):
         if re.match("^/admin/", request.path):
 
+
             return None
         elif request.COOKIES.get('res_code'):
             if request.path != '/user/login/' and request.path != '/user/register/' and request.path != '/user/check/' :

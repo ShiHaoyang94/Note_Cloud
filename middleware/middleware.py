@@ -26,8 +26,13 @@ class SimpleMiddleware(MiddlewareMixin):
                     if request.path != '/index/' and request.path != '/user/exit/':
 
                         return HttpResponseRedirect('/index')
+                elif request.path == '/user/register/':
+                    return HttpResponseRedirect('/user/register')
+                elif request.path != '/user/check/':
+                    return HttpResponseRedirect('/user/check')
                 else:
                     return HttpResponseRedirect('/user/login/')
+
         else:
 
             if request.path != '/user/login/' and request.path != '/user/register/' :
